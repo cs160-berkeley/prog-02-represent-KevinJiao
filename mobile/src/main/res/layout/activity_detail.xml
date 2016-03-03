@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.kevin.represent.Detail">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:adjustViewBounds="true"
+            android:background="@color/cardview_light_background"
+            android:scaleType="fitCenter"
+            android:src="@drawable/boxer" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_light_background"
+            android:gravity="center"
+            android:text="Barbara Boxer(D)"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vice chairman, Committee on ethics. (See More)"
+            android:textSize="20sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/separator"
+                android:dividerPadding="22dp"
+                android:orientation="vertical"
+                android:paddingLeft="10sp"
+                android:paddingRight="10sp"
+                android:showDividers="middle">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Feb. 12, 2016	HR 2017	Common Sense Nutrition Disclosure Act of 2015	Bill Passed - House
+(266 - 144)	Nay" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Feb. 10, 2016	HR 3293	Scientific Research in the National Interest Act	Bill Passed - House
+(236 - 178)	Nay" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Feb. 4, 2016	HR 766	Financial Institution Customer Protection Act of 2016	Bill Passed - House
+(250 - 169)	Nay" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Feb. 2, 2016	HR 3762	Restoring Americans' Healthcare Freedom Reconciliation Act of 2015	Veto Override Failed - House
+(241 - 186)	Nay" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Term Ends March 2016"
+            android:textSize="30sp" />
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

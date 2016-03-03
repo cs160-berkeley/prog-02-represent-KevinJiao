@@ -1,0 +1,113 @@
+<android.support.wearable.view.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/flag"
+    android:padding="15dp">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20sp"
+                android:gravity="center"
+                android:text="Representatives for ZIP: "
+                android:textColor="@color/white" />
+
+            <android.support.wearable.view.CardFrame
+                android:id="@+id/cardFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="viewDetailed">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Barbara Boxer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Democrat" />
+                </LinearLayout>
+
+
+            </android.support.wearable.view.CardFrame>
+
+            <android.support.wearable.view.CardFrame
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dianne Feinstein" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Democrat" />
+                </LinearLayout>
+
+
+            </android.support.wearable.view.CardFrame>
+
+            <android.support.wearable.view.CardFrame
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Barbara Lee" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Democrat" />
+                </LinearLayout>
+            </android.support.wearable.view.CardFrame>
+
+            <android.support.wearable.view.CardFrame
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="viewVote">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tap for vote view" />
+                </LinearLayout>
+            </android.support.wearable.view.CardFrame>
+        </LinearLayout>
+    </ScrollView>
+</android.support.wearable.view.BoxInsetLayout>
