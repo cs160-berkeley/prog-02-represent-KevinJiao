@@ -25,7 +25,7 @@
             <ImageView
                 android:id="@+id/pic"
                 android:layout_width="wrap_content"
-                android:layout_height="100sp"
+                android:layout_height="80sp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/boxer" />
@@ -40,8 +40,7 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Barbara Boxer"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,6 +48,7 @@
                     android:layout_below="@id/name">
 
                     <ImageView
+                        android:id="@+id/home"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -58,6 +58,7 @@
                         android:src="@drawable/ic_home_24dp" />
 
                     <ImageView
+                        android:id="@+id/email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -66,6 +67,7 @@
                         android:src="@drawable/ic_email_24dp" />
 
                     <ImageView
+                        android:id="@+id/twitter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -74,6 +76,7 @@
                         android:src="@drawable/ic_info_24dp" />
 
                     <ImageView
+                        android:id="@+id/info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -85,6 +88,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pic"
