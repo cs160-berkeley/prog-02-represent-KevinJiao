@@ -97,7 +97,7 @@ public class Congressional extends AppCompatActivity {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View repView = inflater.inflate(R.layout.rep_card, parent, false);
             TextView name = (TextView) repView.findViewById(R.id.name);
-            TextView desc = (TextView) repView.findViewById(R.id.desc);
+            final TextView desc = (TextView) repView.findViewById(R.id.desc);
             ImageView home = (ImageView) repView.findViewById(R.id.home);
             ImageView email = (ImageView) repView.findViewById(R.id.email);
             ImageView twitter = (ImageView) repView.findViewById(R.id.twitter);
@@ -114,11 +114,23 @@ public class Congressional extends AppCompatActivity {
                         .append(rep.getString("party"));
                 name.setText(sb.toString());
                 desc.setText(rep.getString("website"));
+                setListener(home, desc, rep.getString("website"));
+                setListener(email, desc, rep.getString("oc_email"));
+                setListener(twitter, desc, rep.getString("oc_email"));
                 return repView;
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
             }
+        }
+
+        public void setListener(View v, final TextView desc, final String msg) {
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    desc.setText(msg);
+                }
+            });
         }
     }
 
