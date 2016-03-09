@@ -21,15 +21,16 @@
         android:id="@+id/zip_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/zip_prompt" />
+        android:layout_below="@id/zip_prompt"
+        android:layout_centerHorizontal="true" />
+
     <Button
         android:id="@+id/zip_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/zip_input"
         android:onClick="getReps"
-        android:text="GO"/>
+        android:text="GO" />
 
     <TextView
         android:id="@+id/gps_prompt"
@@ -38,9 +39,15 @@
         android:layout_below="@id/zip_button"
         android:text="or use location services to continue" />
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/map"
-        android:layout_below="@+id/gps_prompt" />
+        android:layout_below="@id/gps_prompt">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </RelativeLayout>
