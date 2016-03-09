@@ -5,6 +5,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Congresswoman" />
+
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
@@ -30,7 +37,7 @@
                 android:layout_toRightOf="@id/pic">
 
                 <TextView
-                    android:id="@+id/info_text"
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Barbara Boxer"
@@ -39,47 +46,49 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/info_text">
+                    android:layout_below="@id/name">
 
                     <ImageView
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:background="@color/colorPrimary"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_home_24dp" />
 
                     <ImageView
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
                         android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_email_24dp" />
 
                     <ImageView
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
                         android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_info_24dp" />
+
                     <ImageView
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/ic_info_24dp"
-                        android:onClick="getDetails"/>
+                        android:onClick="getDetails"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_info_24dp" />
                 </LinearLayout>
             </RelativeLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/header"
-                android:text="Barbaralee.senate.gov"/>
+                android:layout_below="@id/pic"
+                android:text="Barbaralee.senate.gov" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

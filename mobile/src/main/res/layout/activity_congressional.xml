@@ -13,34 +13,10 @@
     android:theme="@style/AppTheme"
     tools:context="com.kevin.represent.Congressional">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/colorPrimary">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Senators"
-                android:background="@color/colorPrimary"
-                style="?android:attr/listSeparatorTextViewStyle"/>
-
-            <include layout="@layout/rep_card" />
-
-            <include layout="@layout/rep_card2" />
-        </LinearLayout>
-    </ScrollView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Congresswoman"
-        android:background="@color/colorPrimary"
-        style="?android:attr/listSeparatorTextViewStyle"/>
-    <include layout="@layout/rep_card3" />
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rep_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
