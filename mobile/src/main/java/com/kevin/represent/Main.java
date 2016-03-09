@@ -7,25 +7,15 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
 public class Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -87,6 +77,13 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
     }
 
     @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        System.out.println("STARTED");
+        super.onStart();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         mGoogleApiClient.disconnect();
@@ -108,6 +105,7 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
         System.out.println("Setting location enabled");
 
         map.setMyLocationEnabled(true);
+        map.setOnMyLocationButtonClickListener(this);
     }
 
     @Override
