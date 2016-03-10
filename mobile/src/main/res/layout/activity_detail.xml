@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/detail_pic"
             android:layout_width="match_parent"
             android:layout_height="150sp"
             android:adjustViewBounds="true"
@@ -21,14 +22,15 @@
             android:src="@drawable/boxer" />
 
         <TextView
+            android:id="@+id/detail_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/cardview_light_background"
             android:gravity="center"
-            android:text="Barbara Boxer(D)"
             android:textSize="30sp" />
 
         <TextView
+            android:id="@+id/committees"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Vice chairman, Committee on ethics. (See More)"
@@ -37,7 +39,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             >
 
             <LinearLayout

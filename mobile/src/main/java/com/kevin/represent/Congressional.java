@@ -2,12 +2,9 @@ package com.kevin.represent;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.internal.IMapFragmentDelegate;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -96,8 +94,9 @@ public class Congressional extends AppCompatActivity {
         repList.setAdapter(adapter);
     }
 
-    public void getDetails(View view) {
+    public void getDetails(View view, String bioId) {
         Intent intent = new Intent(this, Detail.class);
+        intent.putExtra("BIO_ID", bioId);
         startActivity(intent);
     }
 
@@ -114,22 +113,24 @@ public class Congressional extends AppCompatActivity {
         @Override
         public View getView(int pos, View convertView, ViewGroup parent) {
             final JSONObject rep = objects.get(pos);
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View repView = inflater.inflate(R.layout.rep_card, parent, false);
             TextView nameView = (TextView) repView.findViewById(R.id.name);
             final TextView desc = (TextView) repView.findViewById(R.id.desc);
             final ImageView profileImage = (ImageView) repView.findViewById(R.id.pic);
+            final ImageView twitter = (ImageView) repView.findViewById(R.id.twitter);
+            final ImageView info = (ImageView) repView.findViewById(R.id.info);
             ImageView home = (ImageView) repView.findViewById(R.id.home);
             ImageView emailView = (ImageView) repView.findViewById(R.id.email);
-            final ImageView twitter = (ImageView) repView.findViewById(R.id.twitter);
             TextView titleView = (TextView) repView.findViewById(R.id.title);
-            String title, name, website, email;
+            String title, website, email;
+            final String bioId, name;
             try {
-                name = rep.getString("title") + " " + rep.getString("first_name") + " " + rep.getString("last_name") + " " + rep.getString("party");
+                name = rep.getString("first_name") + " " + rep.getString("last_name") + " " + rep.getString("party");
                 website = rep.getString("website");
                 email = rep.getString("oc_email");
                 title = rep.getString("title");
+                bioId = rep.getString("bioguide_id");
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
@@ -162,12 +163,20 @@ public class Congressional extends AppCompatActivity {
                             public void success(Result<List<Tweet>> result) {
                                 List<Tweet> tweets = result.data;
                                 for (Tweet t : tweets) {
-                                    String url = t.user.profileImageUrl;
-                                    System.out.println(url);
-                                    url = url.replace("_normal", "");
+                                    final String url = t.user.profileImageUrl.replace("_normal", "");
                                     System.out.println(url);
                                     setListener(twitter, desc, Html.fromHtml(t.text).toString());
                                     Picasso.with(getContext()).load(url).into(profileImage);
+                                    info.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getContext(), Detail.class);
+                                            intent.putExtra("BIO_ID", bioId);
+                                            intent.putExtra("PIC_URL", url);
+                                            intent.putExtra("NAME", name);
+                                            startActivity(intent);
+                                        }
+                                    });
                                 }
                             }
 
