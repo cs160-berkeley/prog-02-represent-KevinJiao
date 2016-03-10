@@ -40,6 +40,10 @@
         <activity
             android:name=".Vote"
             android:label="@string/title_activity_vote"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="89cecb128faf61f3a3648fd9fe4e77f4c2ce363e" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

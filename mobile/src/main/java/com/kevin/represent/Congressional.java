@@ -1,49 +1,70 @@
 package com.kevin.represent;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.internal.IMapFragmentDelegate;
-import com.google.android.gms.plus.internal.model.people.PersonEntity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.*;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.AppSession;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import io.fabric.sdk.android.Fabric;
 
 public class Congressional extends AppCompatActivity {
-    private ViewGroup mRelativeLayout;
-    ArrayList<JSONObject> reps = new ArrayList<JSONObject>();
+    ArrayList<JSONObject> reps = new ArrayList<>();
     ArrayAdapter<JSONObject> adapter;
-
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "geDYiMZy7u8J0GW7UiVzdJP79";
+    private static final String TWITTER_SECRET = "l0t4MO5tUGviFDLnBeMqjdNJg92rR15uPYLFhUB9G57dh234dk";
+    AppSession guestSession;
+    TwitterApiClient twitterApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_congressional);
-        mRelativeLayout = (ViewGroup) findViewById(R.id.rep_layout);
+        ViewGroup mRelativeLayout = (ViewGroup) findViewById(R.id.rep_layout);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://congress.api.sunlightfoundation.com/legislators/locate", this.getParams(), new AsyncHttpResponseHandler() {
@@ -92,36 +113,76 @@ public class Congressional extends AppCompatActivity {
 
         @Override
         public View getView(int pos, View convertView, ViewGroup parent) {
-            JSONObject rep = objects.get(pos);
+            final JSONObject rep = objects.get(pos);
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View repView = inflater.inflate(R.layout.rep_card, parent, false);
-            TextView name = (TextView) repView.findViewById(R.id.name);
+            TextView nameView = (TextView) repView.findViewById(R.id.name);
             final TextView desc = (TextView) repView.findViewById(R.id.desc);
+            final ImageView profileImage = (ImageView) repView.findViewById(R.id.pic);
             ImageView home = (ImageView) repView.findViewById(R.id.home);
-            ImageView email = (ImageView) repView.findViewById(R.id.email);
-            ImageView twitter = (ImageView) repView.findViewById(R.id.twitter);
-            ImageView info = (ImageView) repView.findViewById(R.id.info);
-
+            ImageView emailView = (ImageView) repView.findViewById(R.id.email);
+            final ImageView twitter = (ImageView) repView.findViewById(R.id.twitter);
+            TextView titleView = (TextView) repView.findViewById(R.id.title);
+            String title, name, website, email;
             try {
-                StringBuilder sb = new StringBuilder();
-                sb.append(rep.getString("title"))
-                        .append(" ")
-                        .append(rep.getString("first_name"))
-                        .append(" ")
-                        .append(rep.getString("last_name"))
-                        .append(" ")
-                        .append(rep.getString("party"));
-                name.setText(sb.toString());
-                desc.setText(rep.getString("website"));
-                setListener(home, desc, rep.getString("website"));
-                setListener(email, desc, rep.getString("oc_email"));
-                setListener(twitter, desc, rep.getString("oc_email"));
-                return repView;
+                name = rep.getString("title") + " " + rep.getString("first_name") + " " + rep.getString("last_name") + " " + rep.getString("party");
+                website = rep.getString("website");
+                email = rep.getString("oc_email");
+                title = rep.getString("title");
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
             }
+            nameView.setText(name);
+            desc.setText(website);
+            setListener(home, desc, website);
+            setListener(emailView, desc, email);
+            if (title.equals("Sen")) {
+                titleView.setText("Senator");
+            } else {
+                titleView.setText("Representative");
+            }
+            if (guestSession == null) {
+                TwitterCore.getInstance().logInGuest(new Callback<AppSession>() {
+                    @Override
+                    public void success(Result<AppSession> result) {
+                        guestSession = result.data;
+                        twitterApiClient = TwitterCore.getInstance().getApiClient(guestSession);
+                        StatusesService statusesService = twitterApiClient.getStatusesService();
+                        String twitterId = "";
+                        try {
+                            twitterId = rep.getString("twitter_id");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("Getting tweets for " + twitterId);
+                        statusesService.userTimeline(null, twitterId, 1, null, null, false, true, false, false, new Callback<List<Tweet>>() {
+                            @Override
+                            public void success(Result<List<Tweet>> result) {
+                                List<Tweet> tweets = result.data;
+                                for (Tweet t : tweets) {
+                                    String url = t.user.profileImageUrl;
+                                    System.out.println(url);
+                                    url = url.replace("_normal", "");
+                                    System.out.println(url);
+                                    setListener(twitter, desc, Html.fromHtml(t.text).toString());
+                                    Picasso.with(getContext()).load(url).into(profileImage);
+                                }
+                            }
+
+                            @Override
+                            public void failure(TwitterException e) {
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+                    }
+                });
+            }
+            return repView;
         }
 
         public void setListener(View v, final TextView desc, final String msg) {

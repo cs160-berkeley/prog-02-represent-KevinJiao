@@ -1,14 +1,10 @@
 package com.kevin.represent;
 
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
-
-import org.w3c.dom.Text;
 
 import java.nio.charset.StandardCharsets;
 

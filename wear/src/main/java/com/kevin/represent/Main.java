@@ -8,17 +8,22 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
-import android.support.wearable.view.GridPagerAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import io.fabric.sdk.android.Fabric;
 import java.util.Random;
 
 
 public class Main extends WearableActivity implements SensorEventListener {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "itvCAJ5eEsRZqAlCkIfg0x0mn";
+    private static final String TWITTER_SECRET = "2gymT2JmnBC2cpRzzD37oSFmjVTsy17xrDTy0s01W8SD30RlAi";
+
     private static final int SHAKE_THRESHOLD = 800;
     SensorManager sensorMgr;
     Sensor sensor;
@@ -57,6 +62,8 @@ public class Main extends WearableActivity implements SensorEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Intent intent = this.getIntent();
         if (intent.getExtras() != null) {
