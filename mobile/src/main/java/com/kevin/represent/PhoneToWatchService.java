@@ -75,8 +75,18 @@ public class PhoneToWatchService extends Service {
                     sendMessage("/COORD", coords);
                 }
             }).start();
-        } else {
-            System.out.println("NO LOCATION DATA IN INTENT");
+        }
+        if (intent.hasExtra("REPS")) {
+            final String repJSON = intent.getStringExtra("REPS");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //first, connect to the apiclient
+                    mApiClient.connect();
+                    //now that you're connected, send a massage with the cat name
+                    sendMessage("/REPS", repJSON);
+                }
+            }).start();
         }
         // Send the message with the cat name
         return START_STICKY;

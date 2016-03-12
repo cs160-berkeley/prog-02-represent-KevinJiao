@@ -75,6 +75,11 @@ public class Congressional extends AppCompatActivity {
                 } catch (org.json.JSONException e) {
                     e.printStackTrace();
                 }
+
+                Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
+                sendIntent.putExtra("REPS", new String(response));
+                startService(sendIntent);
+
             }
 
             @Override

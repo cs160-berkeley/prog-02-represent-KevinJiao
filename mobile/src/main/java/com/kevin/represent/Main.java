@@ -131,11 +131,6 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
             double lat = mLastLocation.getLatitude();
             double lon = mLastLocation.getLongitude();
 
-            Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
-            sendIntent.putExtra("LAT", lat);
-            sendIntent.putExtra("LON", lon);
-            startService(sendIntent);
-
             Intent intent = new Intent(this, Congressional.class);
             intent.putExtra("LAT", lat);
             intent.putExtra("LON", lon);

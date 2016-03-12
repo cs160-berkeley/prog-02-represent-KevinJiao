@@ -43,6 +43,13 @@ public class WatchListenerService extends WearableListenerService {
             intent.putExtra("LAT", Double.parseDouble(latlng[0]));
             intent.putExtra("LON", Double.parseDouble(latlng[1]));
             startActivity(intent);
+        } else if (messageEvent.getPath().equalsIgnoreCase("/REPS")) {
+            System.out.println("REPS RECEIVED");
+            String repsJSON = new String(messageEvent.getData(), StandardCharsets.UTF_8);
+            Intent intent = new Intent(this, Main.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("REPS", repsJSON);
+            startActivity(intent);
         }
     }
 }
