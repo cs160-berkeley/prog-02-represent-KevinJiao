@@ -57,7 +57,7 @@ public class Congressional extends AppCompatActivity {
         ViewGroup mRelativeLayout = (ViewGroup) findViewById(R.id.rep_layout);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
-
+        Intent intent = getIntent();
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://congress.api.sunlightfoundation.com/legislators/locate", this.getParams(), new AsyncHttpResponseHandler() {
             @Override
@@ -79,7 +79,6 @@ public class Congressional extends AppCompatActivity {
                 Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
                 sendIntent.putExtra("REPS", new String(response));
                 startService(sendIntent);
-
             }
 
             @Override
@@ -91,12 +90,6 @@ public class Congressional extends AppCompatActivity {
         adapter = new repAdapter(this, R.layout.rep_card, reps);
         ListView repList = (ListView) findViewById(R.id.rep_list);
         repList.setAdapter(adapter);
-    }
-
-    public void getDetails(View view, String bioId) {
-        Intent intent = new Intent(this, Detail.class);
-        intent.putExtra("BIO_ID", bioId);
-        startActivity(intent);
     }
 
     private class repAdapter extends ArrayAdapter<JSONObject> {

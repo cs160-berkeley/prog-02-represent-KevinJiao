@@ -138,8 +138,17 @@ public class Main extends WearableActivity implements SensorEventListener {
                 e.printStackTrace();
             }
             nameView.setText(name);
+            repCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
+                    sendIntent.putExtra("JSON", rep.toString());
+                    startService(sendIntent);
+                }
+            });
             return repCard;
         }
+
     }
 
 

@@ -6,6 +6,9 @@ import android.util.Log;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -20,13 +23,27 @@ public class PhoneListenerService extends WearableListenerService {
     public void onMessageReceived(MessageEvent messageEvent) {
         System.out.println("message received");
         Log.d("T", "in PhoneListenerService, got: " + messageEvent.getPath());
-        if (messageEvent.getPath().equalsIgnoreCase(VIEW_REP)) {
+        if (messageEvent.getPath().equalsIgnoreCase("/REPS")) {
 
             // Value contains the String we sent over in WatchToPhoneService, "good job"
             String rep = new String(messageEvent.getData(), StandardCharsets.UTF_8);
-
+            System.out.println("RECEIVE SHIT FROM WATCH" + rep);
             Intent intent = new Intent(getApplicationContext(), Detail.class);
+            String bioId = "", twitterId = "", name = "";
+            JSONObject repObj;
+            try {
+                repObj = new JSONObject(rep);
+                bioId = repObj.getString("bioguide_id");
+                name = repObj.getString("first_name") + " " + repObj.getString("last_name") + " " + repObj.getString("party");
+                twitterId = repObj.getString("twitter_id");
 
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            intent.putExtra("BIO_ID", bioId);
+            intent.putExtra("TWITTER_ID", twitterId);
+            //intent.putExtra("PIC_URL", url);
+            intent.putExtra("NAME", name);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

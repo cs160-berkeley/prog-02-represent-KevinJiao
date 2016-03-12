@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,16 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.AppSession;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,12 +38,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import io.fabric.sdk.android.Fabric;
 
 public class Detail extends AppCompatActivity {
     String bioId;
     ExpandableTextView committeeText;
     ArrayAdapter<String> adapter;
     ListView billList;
+    private static final String TWITTER_KEY = "geDYiMZy7u8J0GW7UiVzdJP79";
+    private static final String TWITTER_SECRET = "l0t4MO5tUGviFDLnBeMqjdNJg92rR15uPYLFhUB9G57dh234dk";
+    AppSession guestSession;
+    TwitterApiClient twitterApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +58,55 @@ public class Detail extends AppCompatActivity {
         bioId = intent.getStringExtra("BIO_ID");
         String picURL = intent.getStringExtra("PIC_URL");
         String name = intent.getStringExtra("NAME");
-        ImageView pic = (ImageView) findViewById(R.id.detail_pic);
+        final String twitterId = intent.getStringExtra("TWITTER_ID");
+        final ImageView pic = (ImageView) findViewById(R.id.detail_pic);
         TextView nameView = (TextView) findViewById(R.id.detail_name);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
+        if (picURL == null) {
+            if (guestSession == null) {
+                TwitterCore.getInstance().logInGuest(new Callback<AppSession>() {
+                    @Override
+                    public void success(Result<AppSession> result) {
+                        guestSession = result.data;
+                        twitterApiClient = TwitterCore.getInstance().getApiClient(guestSession);
+                        StatusesService statusesService = twitterApiClient.getStatusesService();
+                        statusesService.userTimeline(null, twitterId, 1, null, null, false, true, false, false, new Callback<List<Tweet>>() {
+                            @Override
+                            public void success(Result<List<Tweet>> result) {
+                                List<Tweet> tweets = result.data;
+                                for (Tweet t : tweets) {
+                                    final String url = t.user.profileImageUrl.replace("_normal", "");
+                                    System.out.println(url);
+                                    Picasso.with(getBaseContext()).load(url).into(pic);
+
+                                }
+                            }
+
+                            @Override
+                            public void failure(TwitterException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                });
+
+            }
+        } else {
+            Picasso.with(this).load(picURL).into(pic);
+        }
         billList = (ListView) findViewById(R.id.bill_list);
         nameView.setText(name);
-        Picasso.with(this).load(picURL).into(pic);
-
         committeeText = (ExpandableTextView) findViewById(R.id.expand_text_view);
         setCommitteeString();
         setVoteList();
     }
+
 
     public void setCommitteeString() {
         RequestParams params = new RequestParams();
@@ -125,6 +180,7 @@ public class Detail extends AppCompatActivity {
             this.context = context;
             this.objects = objects;
         }
+
     }
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
