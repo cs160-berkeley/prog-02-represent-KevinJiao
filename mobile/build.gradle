@@ -48,4 +48,5 @@ dependencies {
         transitive = true;
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.ms-square:expandableTextView:0.1.4'
 }

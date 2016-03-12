@@ -7,82 +7,72 @@
     android:fitsSystemWindows="true"
     tools:context="com.kevin.represent.Detail">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/detail_pic"
-            android:layout_width="match_parent"
-            android:layout_height="150sp"
-            android:adjustViewBounds="true"
-            android:background="@color/cardview_light_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/boxer" />
-
-        <TextView
-            android:id="@+id/detail_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cardview_light_background"
-            android:gravity="center"
-            android:textSize="30sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/committees"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Vice chairman, Committee on ethics. (See More)"
-            android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/detail_pic"
+                android:layout_width="match_parent"
+                android:layout_height="150sp"
+                android:adjustViewBounds="true"
+                android:background="@color/cardview_light_background"
+                android:scaleType="fitCenter"
+                android:src="@drawable/boxer" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/detail_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@drawable/separator"
-                android:dividerPadding="22dp"
-                android:orientation="vertical"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:showDividers="middle">
+                android:background="@color/cardview_light_background"
+                android:gravity="center"
+                android:textSize="30sp" />
+
+            <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/expand_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/common_plus_signin_btn_text_dark_disabled"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2">
 
                 <TextView
+                    android:id="@id/expandable_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Feb. 12, 2016	HR 2017	Common Sense Nutrition Disclosure Act of 2015	Bill Passed - House
-(266 - 144)	Nay" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="#666666"
+                    android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
+
+                <ImageButton
+                    android:id="@id/expand_collapse"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Feb. 10, 2016	HR 3293	Scientific Research in the National Interest Act	Bill Passed - House
-(236 - 178)	Nay" />
+                    android:layout_gravity="right|bottom"
+                    android:padding="16dp" />
+            </com.ms.square.android.expandabletextview.ExpandableTextView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Feb. 4, 2016	HR 766	Financial Institution Customer Protection Act of 2016	Bill Passed - House
-(250 - 169)	Nay" />
+            <ListView
+                android:id="@+id/bill_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Feb. 2, 2016	HR 3762	Restoring Americans' Healthcare Freedom Reconciliation Act of 2015	Veto Override Failed - House
-(241 - 186)	Nay" />
+            </ListView>
 
-            </LinearLayout>
-        </ScrollView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Term Ends March 2016"
-            android:textSize="30sp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Term Ends March 2016"
+                android:textSize="30sp" />
+        </LinearLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
