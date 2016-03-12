@@ -32,6 +32,17 @@ public class WatchListenerService extends WearableListenerService {
 
             intent.putExtra("ZIP", zip);
             startActivity(intent);
+        } else if (messageEvent.getPath().equalsIgnoreCase("/COORD")) {
+            System.out.println("COORD RECEIVED");
+            String coord = new String(messageEvent.getData(), StandardCharsets.UTF_8);
+            Intent intent = new Intent(this, Main.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Toast toast = Toast.makeText(getApplicationContext(), "New COORD: " + coord, Toast.LENGTH_LONG);
+            toast.show();
+            String[] latlng = coord.split(",");
+            intent.putExtra("LAT", Double.parseDouble(latlng[0]));
+            intent.putExtra("LON", Double.parseDouble(latlng[1]));
+            startActivity(intent);
         }
     }
 }

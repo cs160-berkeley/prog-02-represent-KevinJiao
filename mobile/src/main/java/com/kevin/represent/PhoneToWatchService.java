@@ -46,23 +46,39 @@ public class PhoneToWatchService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Which cat do we want to feed? Grab this info from INTENT
         // which was passed over when we called startService
-        if (intent == null){
+        if (intent == null) {
+            System.out.println("NO INTENT");
             return -1;
         }
-        Bundle extras = intent.getExtras();
-        final String zip = extras.getString("ZIP");
-
+        if (intent.hasExtra("ZIP")) {
+            final String zip = intent.getStringExtra("ZIP");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //first, connect to the apiclient
+                    mApiClient.connect();
+                    //now that you're connected, send a massage with the cat name
+                    sendMessage("/ZIP", zip);
+                }
+            }).start();
+        }
+        if (intent.hasExtra("LAT")) {
+            double lat = intent.getDoubleExtra("LAT", 0);
+            double lon = intent.getDoubleExtra("LON", 0);
+            final String coords = lat + "," + lon;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //first, connect to the apiclient
+                    mApiClient.connect();
+                    //now that you're connected, send a massage with the cat name
+                    sendMessage("/COORD", coords);
+                }
+            }).start();
+        } else {
+            System.out.println("NO LOCATION DATA IN INTENT");
+        }
         // Send the message with the cat name
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //first, connect to the apiclient
-                mApiClient.connect();
-                //now that you're connected, send a massage with the cat name
-                sendMessage("/ZIP", zip);
-            }
-        }).start();
-
         return START_STICKY;
     }
 
@@ -74,6 +90,7 @@ public class PhoneToWatchService extends Service {
     private void sendMessage(final String path, final String text) {
         //one way to send message: start a new thread and call .await()
         //see watchtophoneservice for another way to send a message
+        System.out.println("Sending " + text + " to " + path);
         new Thread(new Runnable() {
             @Override
             public void run() {
