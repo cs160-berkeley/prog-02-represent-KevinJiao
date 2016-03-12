@@ -2,6 +2,8 @@ package com.kevin.represent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.internal.IMapFragmentDelegate;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -57,8 +58,8 @@ public class Congressional extends AppCompatActivity {
         ViewGroup mRelativeLayout = (ViewGroup) findViewById(R.id.rep_layout);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
-        Intent intent = getIntent();
         AsyncHttpClient client = new AsyncHttpClient();
+        final Intent intent = getIntent();
         client.get("http://congress.api.sunlightfoundation.com/legislators/locate", this.getParams(), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -72,13 +73,13 @@ public class Congressional extends AppCompatActivity {
                     }
                     System.out.println(reps);
                     adapter.notifyDataSetChanged();
+                    Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
+                    getCounty(intent, sendIntent, res);
                 } catch (org.json.JSONException e) {
                     e.printStackTrace();
                 }
 
-                Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
-                sendIntent.putExtra("REPS", new String(response));
-                startService(sendIntent);
+
             }
 
             @Override
@@ -205,16 +206,46 @@ public class Congressional extends AppCompatActivity {
         if (intent.hasExtra("ZIP")) {
             zip = intent.getStringExtra("ZIP");
             params.put("zip", zip);
-            System.out.println("Using ZIP: " + zip);
         } else if (intent.hasExtra("LAT")) {
             lat = intent.getDoubleExtra("LAT", 0);
             lon = intent.getDoubleExtra("LON", 0);
             params.put("latitude", lat);
             params.put("longitude", lon);
-            System.out.println("Using lat + long " + lat + ", " + lon);
         } else {
             System.out.println("NO LOCATION DATA IN INTENT");
         }
         return params;
+    }
+
+    private void getCounty(Intent intent, final Intent sendIntent, final JSONObject res) {
+        RequestParams params = new RequestParams();
+        double lat = intent.getDoubleExtra("LAT", 0);
+        double lon = intent.getDoubleExtra("LON", 0);
+        params.put("key", "AIzaSyCdAU507blpq2Pttf-LBu1X5bRcnC4PZd4");
+        params.put("result_type", "administrative_area_level_2");
+        params.put("latlng", lat + "," + lon);
+
+        new AsyncHttpClient().get("https://maps.googleapis.com/maps/api/geocode/json", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    String county = new JSONObject(new String(responseBody))
+                            .getJSONArray("results")
+                            .getJSONObject(0)
+                            .getJSONArray("address_components")
+                            .getJSONObject(0)
+                            .getString("long_name");
+                    res.put("county", county);
+                    sendIntent.putExtra("REPS", res.toString());
+                    startService(sendIntent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
     }
 }

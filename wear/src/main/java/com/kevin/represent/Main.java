@@ -69,9 +69,9 @@ public class Main extends WearableActivity implements SensorEventListener {
             for (int i = 0; i < res.getInt("count"); i++) {
                 JSONObject repObj = repObjects.getJSONObject(i);
                 reps.add(repObj);
-                String description = "Representatives for " + repObj.getString("state_name") + " district " + repObj.getInt("district");
-                districtView.setText(description);
             }
+            String description = "Representatives for " + res.getString("county");
+            districtView.setText(description);
         } catch (org.json.JSONException e) {
             System.out.println("Error parsing reps JSON String");
             e.printStackTrace();
@@ -168,7 +168,6 @@ public class Main extends WearableActivity implements SensorEventListener {
             params.put("latitude", lat);
             params.put("longitude", lon);
             System.out.println("Using lat + long " + lat + ", " + lon);
-        } else {
         }
         return params;
     }

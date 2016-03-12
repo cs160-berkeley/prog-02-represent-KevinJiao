@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.wearable.Wearable;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+
 import io.fabric.sdk.android.Fabric;
 
 public class Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -60,7 +62,6 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
 
     @Override
     public void onConnected(Bundle bundle) {
-        System.out.println("CONNECTED");
     }
 
     @Override
@@ -69,7 +70,7 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -82,7 +83,6 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
-        System.out.println("STARTED");
         super.onStart();
     }
 
@@ -124,7 +124,6 @@ public class Main extends AppCompatActivity implements GoogleApiClient.Connectio
             System.out.println("PERMISSIONS FUCKED");
             return false;
         }
-        System.out.println("BUTTON CLICKED");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {

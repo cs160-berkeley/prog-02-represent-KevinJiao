@@ -52,7 +52,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@color/colorPrimary"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_home_24dp" />
 
