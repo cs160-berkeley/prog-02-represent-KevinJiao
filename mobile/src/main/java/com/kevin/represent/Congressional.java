@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonParser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -36,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,16 +231,34 @@ public class Congressional extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    String county = new JSONObject(new String(responseBody))
+                    JSONObject location = new JSONObject(new String(responseBody));
+                    String county = location
                             .getJSONArray("results")
                             .getJSONObject(0)
                             .getJSONArray("address_components")
                             .getJSONObject(0)
                             .getString("long_name");
+
+                    String state = location
+                            .getJSONArray("results")
+                            .getJSONObject(0)
+                            .getJSONArray("address_components")
+                            .getJSONObject(1)
+                            .getString("short_name");
+
                     res.put("county", county);
+                    InputStream is = getAssets().open("results.json");
+                    int size = is.available();
+                    byte[] buffer = new byte[size];
+                    is.read(buffer);
+                    is.close();
+                    String json = new String(buffer, "UTF-8");
+                    JSONObject results = new JSONObject(json);
+                    JSONObject countyResults = results.getJSONObject(county + ", " + state);
+                    res.put("countyresults", countyResults);
                     sendIntent.putExtra("REPS", res.toString());
                     startService(sendIntent);
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

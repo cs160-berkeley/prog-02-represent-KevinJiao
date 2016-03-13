@@ -38,7 +38,6 @@ public class Main extends WearableActivity implements SensorEventListener {
     private static final String TWITTER_KEY = "itvCAJ5eEsRZqAlCkIfg0x0mn";
     private static final String TWITTER_SECRET = "2gymT2JmnBC2cpRzzD37oSFmjVTsy17xrDTy0s01W8SD30RlAi";
 
-    private static final int SHAKE_THRESHOLD = 800;
     SensorManager sensorMgr;
     Sensor sensor;
     boolean notSet = false;
@@ -70,13 +69,13 @@ public class Main extends WearableActivity implements SensorEventListener {
                 JSONObject repObj = repObjects.getJSONObject(i);
                 reps.add(repObj);
             }
+            reps.add(res.getJSONObject("countyresults"));
             String description = "Representatives for " + res.getString("county");
             districtView.setText(description);
         } catch (org.json.JSONException e) {
             System.out.println("Error parsing reps JSON String");
             e.printStackTrace();
         }
-
         adapter = new repAdapter(this, R.layout.rep_card, reps);
         ListView repList = (ListView) findViewById(R.id.rep_cards);
         repList.setAdapter(adapter);
@@ -131,6 +130,20 @@ public class Main extends WearableActivity implements SensorEventListener {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View repCard = inflater.inflate(R.layout.rep_card, parent, false);
             TextView nameView = (TextView) repCard.findViewById(R.id.title);
+            if (pos == objects.size() - 1) {
+                nameView.setText("Click to see 2012 election results for this county");
+                final String results = objects.get(pos).toString();
+                repCard.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent sendIntent = new Intent(getBaseContext(), Vote.class);
+                        sendIntent.putExtra("results", results);
+                        startActivity(sendIntent);
+                    }
+                });
+                return repCard;
+            }
             String name = "blank";
             try {
                 name = rep.getString("first_name") + " " + rep.getString("last_name") + " " + rep.getString("party");
