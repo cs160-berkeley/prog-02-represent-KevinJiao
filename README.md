@@ -4,17 +4,21 @@ Briefly describe your app here.
 
 ## Authors
 
-FirstName LastName ([your_email@berkeley.edu](mailto:your_email@berkeley.edu))
+Kevin Jiao ([kevin.jiao@berkeley.edu](mailto:kevin.jiao@berkeley.edu))
 
 ## Demo Video
 
-See [your demo video title here] (https://link_to_your_video)
+See [Represent in action] (https://link_to_your_video)
 
 ## Screenshots
 
-<img src="screenshots/main.png" height="400" alt="Screenshot"/>
+<img src="screenshots/pic1.png" height="400" alt="Screenshot"/>
+<img src="screenshots/pic2.png" height="400" alt="Screenshot"/>
+<img src="screenshots/pic3.png" height="400" alt="Screenshot"/>
+
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Any other support
+* Stackoverflow
+* Google
+* Picasso Image library
